@@ -1,13 +1,17 @@
 from gensim.models import Word2Vec
 import pandas as pd
 from pathlib import Path
+import dill
+
 
 
 def train_word2vec_model(df):
     sent = [row.split(' ') for row in df['clean_text']]
     model = Word2Vec(sent, min_count=1, size=50, workers=3, window=3, sg=1)
     path = Path(__file__).parent / "../../../results/models/word2vec.model"
-    model.save(path)
+    # model.save(path)
+    with open(path, 'wb') as f:
+        dill.dump(model, f)
 
 
 if __name__ == '__main__':
