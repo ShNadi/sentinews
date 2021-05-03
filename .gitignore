@@ -5,9 +5,14 @@
 /data/temp
 /data/processed
 /data/raw
+/results
 
 # User-specific stuff:
 .idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+
+# notebook checkpoints
+*/.ipynb_checkpoints/*.ipynb
+*.ipynb
