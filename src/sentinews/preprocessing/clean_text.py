@@ -25,8 +25,11 @@ def clean(df):
     # Remove newlines
     df.text.replace('\n', '', inplace=True)
 
-    # remove punctuation
+    # Remove punctuation
     df['clean_text'] = df['clean_text'].apply(remove_punctuations)
+
+    # Drop null values in clean_text
+    df.dropna(subset=['clean_text'], inplace=True)
 
     path = Path(__file__).parent / "../../../data/processed/news-dataset--2010-04-21.csv"
     df.to_csv(path, index=False)
