@@ -6,7 +6,7 @@ import dill
 
 def train_word2vec_model(df):
     sent = [row.split(' ') for row in df['clean_text']]
-    model = Word2Vec(sent, min_count=1, size=50, workers=3, window=3, sg=1)
+    model = Word2Vec(sent, min_count=1, size=100, workers=3, window=5, sg=1)
     path = Path(__file__).parent / "../../../results/models/word2vec.model"
     # model.save(path)
     with open(path, 'wb') as f:
@@ -26,6 +26,13 @@ def check_similarities(word1, word2):
     sims = model.wv.similarity(word1, word2)
     print(sims)
 
+# Turney 2002- score sentiment for sentence
+def check_similarities(word1, word2):
+    path = Path(__file__).parent / "../../../results/models/word2vec.model"
+    with open(path, 'rb') as f:
+        model = dill.load(f)
+    sims = model.wv.similarity(word1, word2)
+    print(sims)
 
 if __name__ == '__main__':
     # df = pd.read_csv('../../../data/processed/news-dataset--2010-04-21.csv')
