@@ -6,6 +6,7 @@ from gensim.models import KeyedVectors
 
 
 def train_word2vec_model(df):
+    df.dropna(subset=['clean_text'], inplace=True)
     sent = [row.split(' ') for row in df['clean_text']]
     model = Word2Vec(sent, min_count=1, size=100, workers=3, window=5, sg=1)
     path = Path(__file__).parent / "../../../results/models/word2vec.model"
