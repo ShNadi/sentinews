@@ -2,6 +2,7 @@ from gensim.models import Word2Vec
 import pandas as pd
 from pathlib import Path
 import dill
+from gensim.models import KeyedVectors
 
 
 def train_word2vec_model(df):
@@ -41,6 +42,12 @@ if __name__ == '__main__':
     # model = Word2Vec.load("../../../results/models/word2vec.model")
     # sims = model.wv.most_similar('vaccin', topn=10)
     # print(sims)
-    check_most_similar('islam', 5)
+    # check_most_similar('slecht', 5)
     # check_similarities('corona', 'vaccin')
+
+    # Get numpy vector of a word
+    # Load back with memory-mapping = read-only, shared across processes.
+    model = Word2Vec.load("../../../results/models/word2vec.model")
+    vector = model.wv['goed']  # Get numpy vector of a word
+    print(vector)
 
