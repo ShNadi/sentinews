@@ -1,12 +1,9 @@
 from gensim.models import Word2Vec
 import pandas as pd
 from scipy import spatial
-
+from sklearn.metrics.pairwise import cosine_similarity
 
 def sentiment_calc(df):
-    # Sum of sentence scores, initial value = 0
-
-
     # Load word vectore for word 'goed'
     model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
     vector_pos = model.wv['goed']  # Get numpy vector of word 'goed'
@@ -15,6 +12,7 @@ def sentiment_calc(df):
 
     # fetch word vector for each word in each row of dataset
     for i in range(len(df)):
+        # Sum of sentence scores, initial value = 0
         sum_scores = 0
         text = df.loc[i, "clean_text"]
         word = text.split()
@@ -25,7 +23,7 @@ def sentiment_calc(df):
             sum_scores += sw_pos - sw_neg
         df.loc[i,'cos_score'] = sum_scores
     print(df)
-
+    df.to_csv('../../../data/processed/news_sentiment.csv', index=False)
 
 
 if __name__=='__main__':
@@ -33,17 +31,3 @@ if __name__=='__main__':
     df.dropna(subset=['clean_text'], inplace=True)
     df.reset_index(drop=True, inplace=True)
     sentiment_calc(df)
-# function ss(sentence s)
-# {
-# a = wordvec(good)
-# b = wordvec(bad)
-#
-# sum = 0
-# for each word w in sentence s:
-# 	sw = cos(w,a)-cos(w,b)
-# 	sum +=sw
-#
-# return sum
-# }
-#
-# # cos = PMI
