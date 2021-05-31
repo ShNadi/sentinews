@@ -31,8 +31,7 @@ difference between these two variable is the sentiment number which is writen in
             sw_neg = 1 - spatial.distance.cosine(word_vector, vector_neg)
             sum_scores += sw_pos - sw_neg
         df.loc[i,'cos_score_words'] = sum_scores
-    print(df)
-    df.to_csv('../../../data/processed/news_sentiment.csv', index=False)
+    df.to_csv('../../../data/processed/news_sentiment_word.csv', index=False)
 
 def sentiment_pretrained(df):
     model = word2vec.KeyedVectors.load_word2vec_format("../../../pre-trained/wikipedia-160.txt", binary=False)
