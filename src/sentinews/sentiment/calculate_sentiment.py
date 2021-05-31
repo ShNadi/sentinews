@@ -5,7 +5,7 @@ import gensim.models.keyedvectors as word2vec
 import nltk
 from sklearn.metrics.pairwise import cosine_similarity
 
-def sentiment_calc(df):
+def sentiment_words(df):
     """Calculates the sentiment of the document considering the wordvector of the word 'goed' as positive vector and the word
 vector of the word 'slecht' as negative vector.
 For every word in clean_text column, the wordvector of the word is loaded and cosine distance of the word and
