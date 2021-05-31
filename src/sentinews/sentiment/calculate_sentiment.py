@@ -6,24 +6,31 @@ import nltk
 from sklearn.metrics.pairwise import cosine_similarity
 
 def sentiment_calc(df):
-    # Load word vectore for word 'goed'
+    """Calculates the sentiment of the document considering the wordvector of the word 'goed' as positive vector and the word
+vector of the word 'slecht' as negative vector.
+For every word in clean_text column, the wordvector of the word is loaded and cosine distance of the word and
+positive vector( word goed) and negative vector(word slecht) is calculated respectively as sw_pos and sw_neg. The
+difference between these two variable is the sentiment number which is writen in the dataframe as a new column.
+
+    :param df: The dataframe including clean_text column
+    :type df: DataFrame
+    """
     model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
-    vector_pos = model.wv['goed']  # Get numpy vector of word 'goed'
-    vector_neg = model.wv['slecht']  # Get numpy vector of word 'slecht'
+    vector_pos = model.wv['goed']       # Get numpy vector of word 'goed'
+    vector_neg = model.wv['slecht']     # Get numpy vector of word 'slecht'
 
 
-    # fetch word vector for each word in each row of dataset
+    # fetch word vector for each word in each row of the dataset
     for i in range(len(df)):
-        # Sum of sentence scores, initial value = 0
-        sum_scores = 0
-        text = df.loc[i, "clean_text"]
-        word = text.split()
-        for w in word:
+        sum_scores = 0                  # Sum of word scores, initial value = 0
+        text = df.loc[i, "clean_text"]  # Read the clean text of row i in the text variable
+        word = text.split()             # Split text to words
+        for w in word:                  # For each word in the list of words calculate the cosine distance
             word_vector = model.wv[w]
             sw_pos = 1 - spatial.distance.cosine(word_vector, vector_pos)
             sw_neg = 1 - spatial.distance.cosine(word_vector, vector_neg)
             sum_scores += sw_pos - sw_neg
-        df.loc[i,'cos_score'] = sum_scores
+        df.loc[i,'cos_score_words'] = sum_scores
     print(df)
     df.to_csv('../../../data/processed/news_sentiment.csv', index=False)
 
