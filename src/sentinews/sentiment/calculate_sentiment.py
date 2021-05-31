@@ -142,7 +142,7 @@ def sentiment_list(df, pos_list, neg_list):
             for y in neg_vec:
                 sw_neg+= 1 - spatial.distance.cosine(word_vector, y)
             sum_scores += sw_pos - sw_neg
-        df.loc[i,'cos_score'] = sum_scores
+        df.loc[i,'cos_score_list'] = sum_scores
     print(df)
 
 if __name__=='__main__':
