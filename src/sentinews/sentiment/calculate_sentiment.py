@@ -105,7 +105,7 @@ def sentiment_sentence(df):
         df.loc[i,'cos_score_sentence']=sum
 
 
-def sentiment_calc_list(df, pos_list, neg_list):
+def sentiment_list(df, pos_list, neg_list):
     """
 
     :param df: The dataframe including clean_text column
@@ -124,7 +124,6 @@ def sentiment_calc_list(df, pos_list, neg_list):
 
     for neg_word in neg_list:
         neg_vec.append(model.wv[neg_word])
-
 
     # fetch word vector for each word in each row of dataset
     for i in range(len(df)):
@@ -155,7 +154,7 @@ if __name__=='__main__':
     # print(df)
     pos_list = ['prima', 'goed']
     neg_list = ['slecht', 'kwaad']
-    sentiment_calc_list(df, pos_list, neg_list)
+    sentiment_list(df, pos_list, neg_list)
 
 
 
