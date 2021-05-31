@@ -3,7 +3,7 @@ import pandas as pd
 from scipy import spatial
 import gensim.models.keyedvectors as word2vec
 import nltk
-from sklearn.metrics.pairwise import cosine_similarity
+
 
 def sentiment_words(df):
     """Calculates the sentiment of the document considering the wordvector of the word 'goed' as positive vector and the word
@@ -34,7 +34,7 @@ difference between these two variable is the sentiment number which is writen in
     print(df)
     df.to_csv('../../../data/processed/news_sentiment.csv', index=False)
 
-def sentiment_calc_pretrained(df):
+def sentiment_pretrained(df):
     model = word2vec.KeyedVectors.load_word2vec_format("../../../pre-trained/wikipedia-160.txt", binary=False)
     vector_pos = model['goed']
     vector_neg = model['slecht']
