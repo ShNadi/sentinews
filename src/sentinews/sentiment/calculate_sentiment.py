@@ -47,29 +47,6 @@ def sentiment_calc_pretrained(df):
     print(df)
     df.to_csv('../../../data/processed/news_sentiment_pretrained.csv', index=False)
 
-# function ss(sentence s)
-# {
-# a = wordvec(good)
-# b = wordvec(bad)
-#
-# sum = 0
-# for each word w in sentence s:
-# 	sw = cos(w,a)-cos(w,b)
-# 	sum +=sw
-#
-# return sum
-# }
-#
-# # cos = PMI
-#
-# function sa(article d)
-# {
-# tokenize sentence(d)
-# sum = 0
-# for each sentence s in article d:
-#   	sum += ss(s)
-# return sum
-# }
 
 def sentiment_sentence_to_word(sentence):
     # Load word vectore for word 'goed'
