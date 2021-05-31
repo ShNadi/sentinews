@@ -95,7 +95,35 @@ def sentiment_calc_sentence(df):
         df.loc[i,'score_sentence']=sum
 
 
+def sentiment_calc_list(df, pos_list, neg_list):
+    # Load word vectore for word 'goed'
+    model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
+    pos_vec = []
+    neg_vec = []
+    for pos_word in pos_list:
+        pos_vec.append(model.wv[pos_word])
 
+    for neg_word in neg_list:
+        neg_vec.append(model.wv[neg_word])
+
+
+    # fetch word vector for each word in each row of dataset
+    for i in range(len(df)):
+        # Sum of sentence scores, initial value = 0
+        sum_scores = 0
+        text = df.loc[i, "clean_text"]
+        word = text.split()
+        for w in word:
+            sw_pos = 0
+            sw_neg = 0
+            word_vector = model.wv[w]
+            for x in pos_vec:
+                sw_pos+= 1 - spatial.distance.cosine(word_vector, x)
+            for y in neg_vec:
+                sw_neg+= 1 - spatial.distance.cosine(word_vector, y)
+            sum_scores += sw_pos - sw_neg
+        df.loc[i,'cos_score'] = sum_scores
+    print(df)
 
 if __name__=='__main__':
     df = df = pd.read_csv('../../../data/processed/news_sentiment.csv')
@@ -104,8 +132,11 @@ if __name__=='__main__':
     # sentiment_calc_pretrained(df)
     df = df.head(5)
 
-    sentiment_calc_sentence(df)
-    print(df)
+    # sentiment_calc_sentence(df)
+    # print(df)
+    pos_list = ['prima', 'goed']
+    neg_list = ['slecht', 'kwaad']
+    sentiment_calc_list(df, pos_list, neg_list)
 
 
 
