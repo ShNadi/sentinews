@@ -106,7 +106,10 @@ def sentiment_sentence(df):
 
 
 def sentiment_list(df, pos_list, neg_list):
-    """
+    """Calculates the sentiment of the document word based considering a list of positive and a list of negative words.
+     The wordvectores are trained by our own corpus.
+     For every word in clean_text column, the wordvector of the word is loaded and cosine distance of the word and
+     all the wordvectores in the pos_vec is calculated.
 
     :param df: The dataframe including clean_text column
     :type df: DataFrame
@@ -119,21 +122,20 @@ def sentiment_list(df, pos_list, neg_list):
     model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
     pos_vec = []
     neg_vec = []
-    for pos_word in pos_list:
-        pos_vec.append(model.wv[pos_word])
+    for pos_word in pos_list:                    # for every positive word in pos_list load the wordvector
+        pos_vec.append(model.wv[pos_word])       # the wordvector for all positive words are stored in pos_vec
 
-    for neg_word in neg_list:
-        neg_vec.append(model.wv[neg_word])
+    for neg_word in neg_list:                   # for every negative word in neg_list load the wordvector
+        neg_vec.append(model.wv[neg_word])      # the wordvector for all negative words are stored in neg_vec
 
-    # fetch word vector for each word in each row of dataset
-    for i in range(len(df)):
-        # Sum of sentence scores, initial value = 0
-        sum_scores = 0
+
+    for i in range(len(df)):                    # fetch wordvector for each word in each row of dataset
+        sum_scores = 0                          # Sum of word scores, initial value = 0
         text = df.loc[i, "clean_text"]
         word = text.split()
         for w in word:
-            sw_pos = 0
-            sw_neg = 0
+            sw_pos = 0                          # Similarity between word w and pos_vec
+            sw_neg = 0                          # Similarity between word w and neg_vec
             word_vector = model.wv[w]
             for x in pos_vec:
                 sw_pos+= 1 - spatial.distance.cosine(word_vector, x)
