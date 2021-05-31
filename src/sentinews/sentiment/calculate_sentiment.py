@@ -89,7 +89,7 @@ def sentiment_sentence_to_word(sentence):
             sum += sw_pos - sw_neg
     return sum
 
-def sentiment_calc_sentence(df):
+def sentiment_sentence(df):
     """ Tokenize each document to sentences and for each sentence calls sentiment_sentence_to_word(sentence) to
     calculate sentence sentiments. sum of sentence sentiments makes the document sentiment.
     This function works with original text field without preprocessing.
