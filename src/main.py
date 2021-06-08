@@ -5,7 +5,7 @@ from sentinews.wordvector import generate_word2vec as wtv
 def main_function(operation):
     if operation == 'preprocessing':
         # Read the original dataset
-        df = pd.read_csv('../data/raw/news-dataset--2010-04-21.csv')
+        df = pd.read_csv('../data/raw/news-dataset--2021-05-11.csv') # Period of six month
 
         # clean dataset including removing stopwords, html tags, newlines, and drop nulls
         pp.clean(df)
@@ -22,4 +22,5 @@ def main_function(operation):
         wtv.check_similarities('corona', 'vaccin')
 
 if __name__=='__main__':
-    main_function('check similarites')
+    main_function('preprocessing')
+    # main_function('check similarites')
