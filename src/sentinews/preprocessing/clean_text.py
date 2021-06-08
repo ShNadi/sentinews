@@ -31,7 +31,7 @@ def clean(df):
     # Drop null values in clean_text
     df.dropna(subset=['clean_text'], inplace=True)
 
-    path = Path(__file__).parent / "../../../data/processed/news-dataset--2010-04-21.csv"
+    path = Path(__file__).parent / "../../../data/processed/news-dataset--2021-05-11.csv"
     df.to_csv(path, index=False)
 
 
@@ -42,7 +42,7 @@ def remove_punctuations(text):
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('../../../data/raw/news-dataset--2010-04-21.csv')
+    df = pd.read_csv('../../../data/raw/news-dataset--2021-05-11.csv')
     clean(df)
 
 
