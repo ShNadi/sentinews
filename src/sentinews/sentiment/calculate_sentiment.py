@@ -3,7 +3,7 @@ import pandas as pd
 from scipy import spatial
 import gensim.models.keyedvectors as word2vec
 import nltk
-
+from pathlib import Path
 
 def sentiment_words(df):
     """Calculates the sentiment of the document considering the wordvector of the word 'goed' as positive vector and
@@ -15,7 +15,11 @@ def sentiment_words(df):
     :param df: The dataframe including clean_text column
     :type df: DataFrame
     """
-    model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
+    # mod_path = Path(__file__).parent
+    # relative_path_model = '../../../results/models/word2vec.model'
+    # model_path = (mod_path / relative_path_model).resolve()
+    model = Word2Vec.load('../results/models/word2vec.model') # Load model
+    # model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
     vector_pos = model.wv['goed']       # Get numpy vector of word 'goed', trained on our own corpus
     vector_neg = model.wv['slecht']     # Get numpy vector of word 'slecht', trained on our own corpus
 
@@ -31,7 +35,9 @@ def sentiment_words(df):
             sw_neg = 1 - spatial.distance.cosine(word_vector, vector_neg)
             sum_scores += sw_pos - sw_neg
         df.loc[i,'cos_score_words'] = sum_scores
-    df.to_csv('../../../data/processed/news_sentiment_word.csv', index=False)
+    # df.to_csv('../../../data/processed/news_sentiment_word.csv', index=False)
+    print(df)
+
 
 def sentiment_pretrained(df):
     """Calculates the sentiment of the document considering the wordvector of the word 'goed' as positive vector and
@@ -146,7 +152,7 @@ def sentiment_list(df, pos_list, neg_list):
     print(df)
 
 if __name__=='__main__':
-    df = df = pd.read_csv('../../../data/processed/news_sentiment.csv')
+    df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
     # df.dropna(subset=['clean_text'], inplace=True)
     # df.reset_index(drop=True, inplace=True)
     # sentiment_calc_pretrained(df)
@@ -154,9 +160,11 @@ if __name__=='__main__':
 
     # sentiment_calc_sentence(df)
     # print(df)
-    pos_list = ['prima', 'goed']
-    neg_list = ['slecht', 'kwaad']
-    sentiment_list(df, pos_list, neg_list)
+    # pos_list = ['prima', 'goed']
+    # neg_list = ['slecht', 'kwaad']
+    # sentiment_list(df, pos_list, neg_list)
+
+    sentiment_words(df)
 
 
 
