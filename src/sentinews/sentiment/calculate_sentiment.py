@@ -1,25 +1,10 @@
 from gensim.models import Word2Vec
 import pandas as pd
 from scipy import spatial
-import gensim.models.keyedvectors as word2vec
 import nltk
-from pathlib import Path
 
 
 def sentiment_sentence_to_word(sentence):
-    """Calculates the sentiment of the sentence considering the wordvector of the word 'goed' as positive vector and the
-     word vector of the word 'slecht' as negative vector. The wordvectores are trained by our own corpus.
-     For every sentence in text column, the wordvector of the word is loaded and cosine distance of the word and
-     positive vector(word goed) and negative vector(word slecht) is calculated as sw_pos and sw_neg respectively. The
-     difference between these two variable is the sentiment number for each word in the sentence. sum of word
-     sentiments makes sentence sentiment.
-
-    :param sentence: The document sentences which are passed to this function through sentiment_calc_sentence()
-    :type sentence:str
-    :return: Sentiment number of the sentence
-    :rtype: float
-    """
-    # Load word vectore for word 'goed'
     model = Word2Vec.load("../../../results/models/word2vec.model")  # Load model
     vector_pos = model.wv['goed']  # Get numpy vector of word 'goed'
     vector_neg = model.wv['slecht']  # Get numpy vector of word 'slecht'
@@ -34,35 +19,15 @@ def sentiment_sentence_to_word(sentence):
     return sum
 
 def sentiment_sentence(df):
-    """ Tokenize each document to sentences and for each sentence calls sentiment_sentence_to_word(sentence) to
-    calculate sentence sentiments. sum of sentence sentiments makes the document sentiment.
-    This function works with original text field without preprocessing.
-
-    :param df: The dataframe including clean_text column
-    :type df: DataFrame
-    """
-    for i in range(len(df)):
-        sum = 0
-        sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])
-        for s in sentence:
-            sum+= sentiment_sentence_to_word(s)
-        df.loc[i,'cos_score_sentence']=sum
+    for i in range(len(df)):                                      # For each document in each row of the dataset
+        document_score = 0                                        # Initial score of the document is 0
+        sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])  # tokenize the document to the sentences
+        for s in sentence:                                        # For each sentence in the list of sentences
+            document_score+= sentiment_sentence_to_word(s)        # Calculate sentence's score & add it to the doc_score
+        df.loc[i,'cos_score_sentence']=document_score             # write the document's score in a new column in the df
 
 
 def sentiment_list(df, pos_list, neg_list):
-    """Calculates the sentiment of the document word based considering a list of positive and a list of negative words.
-     The wordvectores are trained by our own corpus.
-     For every word in clean_text column, the wordvector of the word is loaded and cosine distance of the word and
-     all the wordvectores in the pos_vec is calculated.
-
-    :param df: The dataframe including clean_text column
-    :type df: DataFrame
-    :param pos_list:
-    :type pos_list: list
-    :param neg_list:
-    :type neg_list: list
-    """
-    # Load word vectore for word 'goed'
     model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
     pos_vec = []
     neg_vec = []
@@ -91,18 +56,9 @@ def sentiment_list(df, pos_list, neg_list):
 
 if __name__=='__main__':
     df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
-    # df.dropna(subset=['clean_text'], inplace=True)
-    # df.reset_index(drop=True, inplace=True)
-    # sentiment_calc_pretrained(df)
     df = df.head(5)
 
-    # sentiment_calc_sentence(df)
-    # print(df)
-    # pos_list = ['prima', 'goed']
-    # neg_list = ['slecht', 'kwaad']
-    # sentiment_list(df, pos_list, neg_list)
 
-    sentiment_words(df)
 
 
 
