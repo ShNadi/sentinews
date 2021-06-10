@@ -4,7 +4,7 @@ from scipy import spatial
 import nltk
 
 
-def sentiment_sentence_to_word(sentence):
+def sentence_score(sentence):
     model = Word2Vec.load("../../../results/models/word2vec.model")  # Load model
     vector_pos = model.wv['goed']  # Get numpy vector of word 'goed'
     vector_neg = model.wv['slecht']  # Get numpy vector of word 'slecht'
@@ -23,7 +23,7 @@ def document_score(df):
         doc_score = 0                                             # Initial score of the document is 0
         sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])  # tokenize the document to the sentences
         for s in sentence:                                        # For each sentence in the list of sentences
-            doc_score+= sentiment_sentence_to_word(s)             # Calculate sentence's score & add it to the doc_score
+            doc_score+= sentence_score(s)             # Calculate sentence's score & add it to the doc_score
         df.loc[i,'cos_score_sentence']=doc_score                  # write the document's score in a new column in the df
 
 
