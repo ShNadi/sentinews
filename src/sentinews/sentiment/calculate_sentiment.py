@@ -18,13 +18,13 @@ def sentiment_sentence_to_word(sentence):
             sum += sw_pos - sw_neg
     return sum
 
-def documnet_score(df):
+def document_score(df):
     for i in range(len(df)):                                      # For each document in each row of the dataset
-        doc_score = 0                                        # Initial score of the document is 0
+        doc_score = 0                                             # Initial score of the document is 0
         sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])  # tokenize the document to the sentences
         for s in sentence:                                        # For each sentence in the list of sentences
-            doc_score+= sentiment_sentence_to_word(s)        # Calculate sentence's score & add it to the doc_score
-        df.loc[i,'cos_score_sentence']=doc_score             # write the document's score in a new column in the df
+            doc_score+= sentiment_sentence_to_word(s)             # Calculate sentence's score & add it to the doc_score
+        df.loc[i,'cos_score_sentence']=doc_score                  # write the document's score in a new column in the df
 
 
 def sentiment_list(df, pos_list, neg_list):
