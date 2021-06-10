@@ -5,25 +5,28 @@ import nltk
 
 
 def sentence_score(sentence):
-    model = Word2Vec.load("../../../results/models/word2vec.model")  # Load model
-    vector_pos = model.wv['goed']  # Get numpy vector of word 'goed'
-    vector_neg = model.wv['slecht']  # Get numpy vector of word 'slecht'
+    model = Word2Vec.load("../../../results/models/word2vec.model")     # Load model
+    vector_pos = model.wv['goed']                                       # Get numpy vector of word 'goed'
+    vector_neg = model.wv['slecht']                                     # Get numpy vector of word 'slecht'
 
-    sum =0
-    for word in sentence.split():
+    sent_score =0
+    for word in sentence.split():                                   # For each word in the sentence:
         if word in model.wv.vocab:
-            word_vector = model.wv[word]
+            word_vector = model.wv[word]                            # If word exists in the model vocab load it's vector
+            # calculate cosine similarity between word's vector and positive-wordvector
             sw_pos = 1 - spatial.distance.cosine(word_vector, vector_pos)
+            # calculate cosine similarity between word's vector and negative-wordvector
             sw_neg = 1 - spatial.distance.cosine(word_vector, vector_neg)
-            sum += sw_pos - sw_neg
-    return sum
+
+            sent_score += sw_pos - sw_neg                          # sent_score obtains by subtracting sw_pos and sw_neg
+    return sent_score
 
 def document_score(df):
-    for i in range(len(df)):                                      # For each document in each row of the dataset
+    for i in range(len(df)):                                      # For each document in each row of the dataset:
         doc_score = 0                                             # Initial score of the document is 0
         sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])  # tokenize the document to the sentences
         for s in sentence:                                        # For each sentence in the list of sentences
-            doc_score+= sentence_score(s)             # Calculate sentence's score & add it to the doc_score
+            doc_score+= sentence_score(s)                         # Calculate sentence's score & add it to the doc_score
         df.loc[i,'cos_score_sentence']=doc_score                  # write the document's score in a new column in the df
 
 
