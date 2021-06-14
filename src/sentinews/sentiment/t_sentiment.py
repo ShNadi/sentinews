@@ -4,6 +4,9 @@ from scipy import spatial
 import gensim.models.keyedvectors as word2vec
 import nltk
 from pathlib import Path
+import time
+
+
 
 def sentiment_words(df):
     """Calculates the sentiment of the document considering the wordvector of the word 'goed' as positive vector and
@@ -18,7 +21,7 @@ def sentiment_words(df):
     # mod_path = Path(__file__).parent
     # relative_path_model = '../../../results/models/word2vec.model'
     # model_path = (mod_path / relative_path_model).resolve()
-    model = Word2Vec.load('../results/models/word2vec.model') # Load model
+    model = Word2Vec.load('../../../results/models/word2vec.model') # Load model
     # model = Word2Vec.load("../../../results/models/word2vec.model") # Load model
     vector_pos = model.wv['goed']       # Get numpy vector of word 'goed', trained on our own corpus
     vector_neg = model.wv['slecht']     # Get numpy vector of word 'slecht', trained on our own corpus
@@ -145,19 +148,74 @@ def sentiment_list(df, pos_list, neg_list):
         df.loc[i, 'cos_score_list'] = sum_scores
     print(df)
 
+    # ****************************************************
+def sentence_score_final(sentence, model, pos_vec, neg_vec):
+    sent_score = 0
+
+    for word in sentence.split():  # For each word in the sentence:
+        sw_pos = 0  # Similarity between word w and pos_vec
+        sw_neg = 0  # Similarity between word w and neg_vec
+        if word in model.wv.vocab:
+            word_vector = model.wv[word]                       # If word exists in the model vocab load it's vector
+            for x in pos_vec:
+                sw_pos += 1 - spatial.distance.cosine(word_vector, x)
+            for y in neg_vec:
+                sw_neg += 1 - spatial.distance.cosine(word_vector, y)
+            sent_score += sw_pos - sw_neg
+    return sent_score
+
+def document_score_final(df):
+    model = Word2Vec.load("../../../results/models/word2vec.model")  # Load model
+
+    negative_file = open("../../../dic/negative_words_nl.txt", "r")
+    list = negative_file.readlines()
+    neg_list = [x.replace('\n', '') for x in list]
+
+    positive_file = open("../../../dic/positive_words_nl.txt", "r")
+    list = positive_file.readlines()
+    pos_list = [x.replace('\n', '') for x in list]
+
+    pos_vec = []
+    neg_vec = []
+    for pos_word in pos_list:  # for every positive word in pos_list load the wordvector
+        if pos_word in model.wv.vocab:
+            pos_vec.append(model.wv[pos_word])  # the wordvector for all positive words are stored in pos_vec
+
+    for neg_word in neg_list:  # for every negative word in neg_list load the wordvector
+        if neg_word in model.wv.vocab:
+            neg_vec.append(model.wv[neg_word])  # the wordvector for all negative words are stored in neg_vec
+
+
+    for i in range(len(df)):                                      # For each document in each row of the dataset:
+        doc_score = 0                                             # Initial score of the document is 0
+        sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])  # tokenize the document to the sentences
+        for s in sentence:                                        # For each sentence in the list of sentences
+            doc_score+= sentence_score_final(s, model, pos_vec, neg_vec)# Calculate sentence's score & add it to the
+            # doc_score
+        df.loc[i,'cos_score_sentence']=doc_score/len(sentence)    # write the document's score in a new column in
+    print(df)
+
 if __name__ == '__main__':
-    df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
+    # df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
     # df.dropna(subset=['clean_text'], inplace=True)
     # df.reset_index(drop=True, inplace=True)
     # sentiment_calc_pretrained(df)
-    df = df.head(5)
+    # df = df.head(5)
 
     # sentiment_calc_sentence(df)
     # print(df)
     # pos_list = ['prima', 'goed']
     # neg_list = ['slecht', 'kwaad']
     # sentiment_list(df, pos_list, neg_list)
-    sentiment_words(df)
+    # sentiment_words(df)
+    start = time.time()
+    df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
+    df = df.head(5)
+
+    document_score_final(df)
+    end = time.time()
+    print(end - start)
+
 
 
 
