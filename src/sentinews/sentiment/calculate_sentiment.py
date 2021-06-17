@@ -1,9 +1,12 @@
 from gensim.models import Word2Vec
 import pandas as pd
 from scipy import spatial
-import nltk
+import numpy as np
 import time
-
+import nltk
+from nltk.corpus import stopwords
+import re
+import string
 
 def sentence_score(sentence, model, pos_vec, neg_vec):
     sent_score = 0
@@ -48,14 +51,20 @@ def document_score(df):
         for s in sentence:                                        # For each sentence in the list of sentences
             doc_score+= sentence_score(s, model, pos_vec, neg_vec)# Calculate sentence's score & add it to the doc_score
         df.loc[i,'cos_score_sentence']=doc_score/len(sentence)    # write the document's score in a new column in
-    print(df)
-
+    df.to_csv('../../../data/processed/news_sentiment_score.csv', index=False)
 
 
 if __name__=='__main__':
     start = time.time()
     df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
-    df = df.head(5)
+    stop_words = stopwords.words('Dutch')
+
+    df.text.replace('\n', '', inplace=True)
+    df['text'] = df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
+    df.text.apply(lambda x: re.sub('<[^<]+?>', '', x))
+    df.text.replace('', np.nan, inplace=True)
+    df.dropna(subset=['text'], inplace=True)
+    df.reset_index(drop=True, inplace=True)
     # print(df)
 
     document_score(df)
