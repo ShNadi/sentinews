@@ -149,7 +149,7 @@ def sentiment_list(df, pos_list, neg_list):
     print(df)
 
     # ****************************************************
-def sentence_score_final(sentence, model, pos_vec, neg_vec):
+def sentence_score_list_final(sentence, model, pos_vec, neg_vec):
     sent_score = 0
 
     for word in sentence.split():  # For each word in the sentence:
@@ -164,7 +164,7 @@ def sentence_score_final(sentence, model, pos_vec, neg_vec):
             sent_score += sw_pos - sw_neg
     return sent_score
 
-def document_score_final(df):
+def document_score_list_final(df):
     model = Word2Vec.load("../../../results/models/word2vec.model")  # Load model
 
     negative_file = open("../../../dic/negative_words_nl.txt", "r")
@@ -190,7 +190,8 @@ def document_score_final(df):
         doc_score = 0                                             # Initial score of the document is 0
         sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])  # tokenize the document to the sentences
         for s in sentence:                                        # For each sentence in the list of sentences
-            doc_score+= sentence_score_final(s, model, pos_vec, neg_vec)# Calculate sentence's score & add it to the
+            doc_score+= sentence_score_list_final(s, model, pos_vec, neg_vec)# Calculate sentence's score & add it to
+            #  the
             # doc_score
         df.loc[i,'cos_score_sentence']=doc_score/len(sentence)    # write the document's score in a new column in
     print(df)
