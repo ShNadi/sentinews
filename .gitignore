@@ -6,6 +6,11 @@
 /data/processed
 /data/raw
 /results
+/dic
+/pre-trained
+
+# exclude test file
+/src/sentinews/sentiment/new_sim.py
 
 # User-specific stuff:
 .idea/
