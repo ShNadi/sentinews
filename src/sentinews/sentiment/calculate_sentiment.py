@@ -57,6 +57,7 @@ def document_score(df):
 if __name__=='__main__':
     start = time.time()
     df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
+    df=df.head(10)
     stop_words = stopwords.words('Dutch')
 
     df.text.replace('\n', '', inplace=True)
@@ -69,7 +70,7 @@ if __name__=='__main__':
 
     document_score(df)
     end = time.time()
-    print(end - start)
+    print("--- %s seconds ---" % (end - start))
 
 
 
