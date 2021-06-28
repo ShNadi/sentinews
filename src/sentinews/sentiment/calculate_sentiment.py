@@ -20,8 +20,43 @@ def sentence_score(sentence, model, pos_vec, neg_vec):
                 sw_pos += model.wv.similarity(word, x)
             for y in neg_vec:
                 sw_neg += model.wv.similarity(word, y)
-            sent_score += sw_pos - sw_neg
+            sent_score += (sw_pos - sw_neg)
     return sent_score
+
+
+def sentence_score_max(sentence, model, pos_vec, neg_vec):
+    sent_score = 0
+    for word in sentence.split():  # For each word in the sentence:
+        sw_pos = 0  # Similarity between word w and pos_vec
+        sw_neg = 0  # Similarity between word w and neg_vec
+        if word in model.wv.vocab:
+            for x in pos_vec:
+                if sw_pos < model.wv.similarity(word, x):
+                    sw_pos = model.wv.similarity(word, x)
+            for y in neg_vec:
+                if sw_neg < model.wv.similarity(word, y):
+                    sw_neg = model.wv.similarity(word, y)
+            if sw_neg > sw_pos:
+                sent_score += -1 # therefore this word is negative
+            else:
+                sent_score += 1 # therefore this word is positive
+    return sent_score
+
+def sent_word(word, model, pos_vec, neg_vec):
+    sw_pos = 0
+    sw_neg = 0
+    if word in model.wv.vocab:
+        for x in pos_vec:
+            if sw_pos < model.wv.similarity(word, x):
+                sw_pos = model.wv.similarity(word, x)
+        for y in neg_vec:
+            if sw_neg < model.wv.similarity(word, y):
+                sw_neg = model.wv.similarity(word, y)
+
+    if sw_neg > sw_pos:
+        return -1  # therefore this word is negative
+    else:
+        return 1  # therefore this word is positive
 
 def document_score(df):
     model = Word2Vec.load("../../../results/models/word2vec.model")  # Load model
@@ -44,20 +79,22 @@ def document_score(df):
         if neg_word in model.wv.vocab:
             neg_vec.append(neg_word)  # the wordvector for all negative words are stored in neg_vec
 
-
+    #print(sent_word("gelukig", model, pos_vec, neg_vec))
     for i in range(len(df)):                                      # For each document in each row of the dataset:
         doc_score = 0                                             # Initial score of the document is 0
         sentence = nltk.tokenize.sent_tokenize(df.loc[i,'text'])  # tokenize the document to the sentences
         for s in sentence:                                        # For each sentence in the list of sentences
-            doc_score+= sentence_score(s, model, pos_vec, neg_vec)# Calculate sentence's score & add it to the doc_score
-        df.loc[i,'cos_score_sentence']=doc_score/len(sentence)    # write the document's score in a new column in
-    df.to_csv('../../../data/processed/news_sentiment_score.csv', index=False)
+            doc_score += sentence_score_max(s, model, pos_vec, neg_vec)# Calculate sentence's score & add it to the
+            # doc_score
+        df.loc[i,'cos_score_sentence'] = doc_score/len(sentence)    # write the document's score in a new column in
+    # df.to_csv('../../../data/processed/news_sentiment_score.csv', index=False)
+    print(df)
 
 
 if __name__=='__main__':
     start = time.time()
     df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
-    df=df.head(10)
+    df=df.head(20)
     stop_words = stopwords.words('Dutch')
 
     df.text.replace('\n', '', inplace=True)
