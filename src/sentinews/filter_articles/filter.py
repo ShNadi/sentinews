@@ -14,16 +14,19 @@ import re
 
     # print(1 if re.search(word, df.loc[0, 'text']) else 0)
 def filter_art(df):
-
-    filter_list = ['immigr', 'migrant', 'migratie', 'asielzoeker', 'vluchteling', 'vreemdeling', 'illegalen',
+    df['out_group']=0
+    for index, row in df.iterrows():
+        filter_list = ['immigr', 'migrant', 'migratie', 'asielzoeker', 'vluchteling', 'vreemdeling', 'illegalen',
                    'allochto',
                    'gastarbeider', 'nieuwe Nederlander', 'etnische minderhe', 'afkomst', 'land van herkomst', 'moslim',
                    'NOT vreemdelingenlegioen']
-    for word in filter_list:
-        if re.search(word, df.loc[0, 'text']):
-            print('1')
+        for word in filter_list:
+            if re.search(word, df.loc[index, 'text']):
+                df.loc[index, 'out_group']=1
 
 if __name__=='__main__':
     df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
-    df = df.head(10)
+    # df = df.head(10)
     filter_art(df)
+    print(df[df['out_group']==1])
+
