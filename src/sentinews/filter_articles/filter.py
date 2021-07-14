@@ -23,9 +23,12 @@ def filter_art(df):
         for word in filter_list:
             if re.search(word, df.loc[index, 'text']):
                 df.loc[index, 'out_group']=1
+    df = df[df['out_group']==1]
+    return df
 
 # Filter articles including 'Nederland' or a name of cities or states in the Netherlands
 def filter_cities(df):
+    df['netherlands']=0
     cities_df = pd.read_csv('../../../data/cites_list/cities.csv', sep=';')
     cities_name = cities_df['Naam_2'].tolist()
     states_name = cities_df['Naam_4'].tolist()
@@ -35,17 +38,17 @@ def filter_cities(df):
     for index, row in df.iterrows():
         if any(x in df.loc[index, 'text'] for x in living_areas_filter):
             df.loc[index, 'netherlands'] = 1
-        else:
-            df.loc[index, 'netherlands'] = 0
+        # else:
+        #     df.loc[index, 'netherlands'] = 0
+    df = df[df['netherlands']==1]
+    return df
 
 
 
 if __name__=='__main__':
     df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
-    # df = df.head(10)
-    # filter_art(df)
-    # print(df[df['out_group']==1])
-    filter_cities(df)
-    df = df.head(10)
-    print(df['netherlands'])
+    df_filter_art = filter_art(df)
+    df_filter_city = filter_cities(df_filter_art)
+    df_filter_city.to_csv('../../../data/processed/filtered_news.csv', index=False)
+
 
