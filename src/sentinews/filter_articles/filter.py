@@ -34,11 +34,12 @@ def filter_outgroups(df):
 
 
 # Filter articles including 'Nederland' or a name of cities or states in the Netherlands
-def filter_cities(df):
+def filter_location(df):
     cities_df = pd.read_csv('../../../data/cites_list/cities.csv', sep=';')
-    cities_name = cities_df['Naam_2'].tolist()
-    states_name = cities_df['Naam_4'].tolist()
-    living_areas_filter = cities_name + states_name
+    cities = cities_df['Naam_2'].tolist()
+    states = cities_df['Naam_4'].tolist()
+    directions = cities_df['Naam_6'].tolist()
+    living_areas_filter = cities + states + directions
     living_areas_filter.append('Nederland')
     living_areas_filter = set(living_areas_filter)
 
@@ -47,8 +48,8 @@ def filter_cities(df):
         if any(x in df.loc[index, 'text'] for x in living_areas_filter):
             df.loc[index, 'netherlands'] = 1
 
-    df = df[df['netherlands'] == 1]
-    return df
+    df_location = df[df['netherlands'] == 1]
+    return df_location
 
 
 if __name__ == '__main__':
@@ -63,8 +64,8 @@ if __name__ == '__main__':
     print(df_filter_outgrp.shape)
     df_filter_outgrp.to_csv('../../../data/processed/filtered_outgroups.csv', index=False)
     #
-    df_filter_city = filter_cities(df_filter_outgrp)
-    print(df_filter_city.shape)
-    df_filter_city.to_csv('../../../data/processed/filtered_news.csv', index=False)
+    # df_filter_location = filter_location(df_filter_outgrp)
+    # print(df_filter_location.shape)
+    # df_filter_location.to_csv('../../../data/processed/filtered_news.csv', index=False)
 
 
