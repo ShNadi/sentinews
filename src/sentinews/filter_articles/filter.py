@@ -22,13 +22,17 @@ def filter_art(df):
 # Filter OutGroups articles including any subset of the words present in the filter list
 def filter_outgroups(df):
     filter_list = ['immigr', 'migrant', 'migratie', 'asielzoeker', 'vluchteling', 'vreemdeling', 'illegalen',
-                   'allochto', 'gastarbeider', 'nieuwe Nederlander', 'etnische minderhe', 'afkomst',
-                   'land van herkomst', 'moslim', 'NOT vreemdelingenlegioen']
+                   'allochto', 'gastarbeider', 'nieuwe nederlander', 'etnische minderhe', 'afkomst',
+                   'land van herkomst', 'moslim']
+    filter_list2 = ['vreemdelingenlegioen']
     for index, row in df.iterrows():
         df.loc[index, 'out_group'] = 0
         for word in filter_list:
             if re.search(word, df.loc[index, 'text']):
                 df.loc[index, 'out_group'] = 1
+        for word in filter_list2:
+            if re.search(word, df.loc[index, 'text']):
+                df.loc[index, 'out_group'] = 0
     df = df[df['out_group'] == 1]
     return df
 
@@ -40,13 +44,22 @@ def filter_location(df):
     states = cities_df['Naam_4'].tolist()
     directions = cities_df['Naam_6'].tolist()
     living_areas_filter = cities + states + directions
-    living_areas_filter.append('Nederland')
+    # living_areas_filter.append('Nederland')
+    # living_areas_filter.append('Nederlands')
+    search_filter = ['nederland', 'holland']
+
+    for i in range(len(living_areas_filter)):
+        living_areas_filter[i] = living_areas_filter[i].lower()
+
     living_areas_filter = set(living_areas_filter)
 
     for index, row in df.iterrows():
-        df[index, 'netherlands'] = 0
+        df.loc[index, 'netherlands'] = 0
         if any(x in df.loc[index, 'text'] for x in living_areas_filter):
             df.loc[index, 'netherlands'] = 1
+        for word in search_filter:
+            if re.search(word, df.loc[index, 'text']):
+                df.loc[index, 'netherlands'] = 1
 
     df_location = df[df['netherlands'] == 1]
     return df_location
@@ -54,6 +67,7 @@ def filter_location(df):
 
 if __name__ == '__main__':
     df_news = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
+    df_news['text'] = df_news['text'].str.lower()
     print("Size of original dataset:", df_news.shape)
 
     df_news = filter_art(df_news)
