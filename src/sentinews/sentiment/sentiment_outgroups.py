@@ -5,7 +5,6 @@ from nltk.corpus import stopwords
 import re
 from gensim.models import Word2Vec
 import nltk
-import gensim.models.keyedvectors as word2vec
 
 
 def sentence_score(sentence, model, neg_vec):
@@ -68,7 +67,6 @@ def normalize_scores(df):
     df['negativity_degree'] = df['negativity_score'].apply(
         lambda x: 1 if 0 <= x < 0.25 else 2 if 0.25 <= x < 0.5 else 3 if 0.5 <= x < 0.75 else 4)
     df.to_csv('../../../data/processed/outgroups_negativity_sentiment.csv', index=False)
-
 
 
 if __name__ == '__main__':
