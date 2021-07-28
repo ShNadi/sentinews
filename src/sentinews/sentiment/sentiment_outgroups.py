@@ -53,7 +53,8 @@ def document_score(df):
     min_value = df['negativity_score'].min()
     df['normalized_score'] = (df['negativity_score'] - min_value) / (max_value - min_value)
     df['negativity_degree'] = df['normalized_score'].apply(
-        lambda x: 1 if 0 <= x < 0.25 else 2 if 0.25 <= x < 0.5 else 3 if 0.5 <= x < 0.75 else 4)
+        lambda x: 1 if 0 <= x < 0.20 else 2 if 0.20 <= x < 0.40 else 3 if 0.40 <= x < 0.60 else 4 if 0.60 <= x < 0.80
+        else 5)
 
     df.to_csv('../../../data/processed/outgroups_negativity_sentiment.csv', index=False)
     # df.to_excel('../../../data/processed/outgroups_negativity_sentiment.xlsx', index=False)
