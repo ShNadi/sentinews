@@ -1,6 +1,6 @@
 # Filter outgroups from the whole set of articles
-# Data provided by "online news database for a period of 8 months" : Start date: 10-11-2020   End date: 10-07-2020
-# Last edit on 20-07-2021 by "Shiva Nadi"
+# Data provided by "online news database for a period of 8 months" : Start date: 10-11-2020   End date: 11-05-2021
+# Last edit on 19-08-2021 by "Shiva Nadi"
 
 
 # Packages
@@ -21,8 +21,9 @@ def filter_art(df):
 
 # Filter OutGroups articles including any subset of the words present in the filter list
 def filter_outgroups(df):
+    # In this new version word 'afkomst' is excluded from the filter list
     filter_list = ['immigr', 'migrant', 'migratie', 'asielzoeker', 'vluchteling', 'vreemdeling', 'illegalen',
-                   'allochto', 'gastarbeider', 'nieuwe nederlander', 'etnische minderhe', 'afkomst',
+                   'allochto', 'gastarbeider', 'nieuwe nederlander', 'etnische minderhe',
                    'land van herkomst', 'moslim']
     filter_list2 = ['vreemdelingenlegioen']
     for index, row in df.iterrows():
