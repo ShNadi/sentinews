@@ -8,6 +8,8 @@
 /results
 /dic
 /pre-trained
+/data
+/paper_cites
 
 # exclude test file
 /src/sentinews/sentiment/new_sim.py
