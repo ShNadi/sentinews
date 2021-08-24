@@ -48,7 +48,7 @@ def document_score(df):
             doc_score += sentence_score(s, model, neg_vec)          # Calculate sentence's score & add it to the
         df.loc[i, 'negativity_score'] = doc_score/len(sentence)    # write the document's score in a new
 
-    # Normalization negativity scores between 0 and 1
+    # Normalizing negativity scores between 0 and 1
     max_value = df['negativity_score'].max()
     min_value = df['negativity_score'].min()
     df['normalized_score'] = (df['negativity_score'] - min_value) / (max_value - min_value)
@@ -58,21 +58,25 @@ def document_score(df):
 
     df.to_csv('../../../data/processed/outgroups_negativity_sentiment.csv', index=False)
     # df.to_excel('../../../data/processed/outgroups_negativity_sentiment.xlsx', index=False)
+    # df.to_csv('../../../data/processed/sample_ds_negativity_sentiment.csv', index=False)
+    # df.to_excel('../../../data/processed/sample_ds_negativity_sentiment.xlsx', index=False)
     print(df)
 
 
-def normalize_scores(df):
-    max_value = df['negativity_score'].max()
-    min_value = df['negativity_score'].min()
-    df['normalized_score'] = (df['negativity_score'] - min_value) / (max_value - min_value)
-    df['negativity_degree'] = df['negativity_score'].apply(
-        lambda x: 1 if 0 <= x < 0.25 else 2 if 0.25 <= x < 0.5 else 3 if 0.5 <= x < 0.75 else 4)
-    df.to_csv('../../../data/processed/outgroups_negativity_sentiment.csv', index=False)
+# def normalize_scores(df):
+#     max_value = df['negativity_score'].max()
+#     min_value = df['negativity_score'].min()
+#     df['normalized_score'] = (df['negativity_score'] - min_value) / (max_value - min_value)
+#     df['negativity_degree'] = df['negativity_score'].apply(
+#         lambda x: 1 if 0 <= x < 0.25 else 2 if 0.25 <= x < 0.5 else 3 if 0.5 <= x < 0.75 else 4)
+#     # df.to_csv('../../../data/processed/outgroups_negativity_sentiment.csv', index=False)
+#     df.to_csv('../../../data/processed/sample_ds_negativity_sentiment.csv', index=False)
 
 
 if __name__ == '__main__':
     start = time.time()
-    df = pd.read_csv('../../../data/processed/filtered_news.csv')
+    df = pd.read_csv('../../../data/processed/filtered_dataset.csv')
+    # df = pd.read_csv('../../../data/processed/random_sample_ds.csv')
     stop_words = stopwords.words('Dutch')
 
     df.text.replace('\n', '', inplace=True)
