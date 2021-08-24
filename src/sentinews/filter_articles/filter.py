@@ -82,5 +82,6 @@ if __name__ == '__main__':
     df_news = filter_location(df_news)
     print("Size of dataset after filtering articles related to the Nederlands:", df_news.shape)
     df_news.to_csv('../../../data/processed/filtered_news.csv', index=False)
+    # df_news.to_csv('../../../data/processed/news-dataset_filters.csv', index=False)
 
 
