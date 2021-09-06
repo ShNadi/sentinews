@@ -19,6 +19,7 @@ def train_word2vec_model(df):
     with open(path, 'wb') as f:
         dill.dump(model, f)
 
+
 def check_most_similar(word, n):
     """
     find the most n similar words to 'word' in the vector space
@@ -34,6 +35,7 @@ def check_most_similar(word, n):
     sims = model.wv.most_similar(word, topn=n)
     print(sims)
 
+
 def check_similarities(word1, word2):
     """
     finds similarity between wordvector 1 and wordvector 2
@@ -48,6 +50,7 @@ def check_similarities(word1, word2):
     sims = model.wv.similarity(word1, word2)
     print(sims)
 
+
 # Turney 2002- score sentiment for sentence
 def check_similarities(word1, word2):
     path = Path(__file__).parent / "../../../results/models/word2vec.model"
@@ -56,8 +59,9 @@ def check_similarities(word1, word2):
     sims = model.wv.similarity(word1, word2)
     print(sims)
 
+
 if __name__ == '__main__':
-    df = pd.read_csv('../../../data/processed/news-dataset--2010-04-21.csv')
+    df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
     df.dropna(subset=['clean_text'], inplace=True)
     train_word2vec_model(df)
     # model = Word2Vec.load("../../../results/models/word2vec.model")
