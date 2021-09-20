@@ -62,18 +62,15 @@ Outgroup's salience is calculated using:
 This project requires:
   - Python 3.7 or higher
   -  Install the dependencies with the code below
-       ```sh
-  pip install -r requirements.txt
+  ```sh
+    pip install -r requirements.txt
   ```
 
 ## License and citation
 
-
 The sentinews project is licensed under the terms of the [MIT License](/LICENSE.md). When using sentinews for academic work, please cite:
 -	Tubergen, F., Nadi, S., Bagheri, A. (2021).
 sentinews - version 0.1.0. url: github.com/ShNadi/sentinews
-
-
 
 ## Conribution
 
@@ -84,6 +81,7 @@ To contribute code to sentinews, please follow these steps:
 - Push the branch to GitHub and issue a Pull Request (PR)
 - Discuss with us the pull request and iterate of eventual changes
 - Read more about pull requests using [GitHub's official documentation](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
+
 
 ## Contact
 
