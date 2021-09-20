@@ -1,12 +1,11 @@
 
 # Sentinews
-***************************************************
 
 Sentinews project aims to investigate the salience of topics like immigration, degree of science-oriented/objectivity 
 versus conspiracy/fake and political orientation for online news articles. In this project we use an unsupervised dictionary based sentiment analysis technique (using wordvectors) for calculating the degree of negativity of the articles toward the immigrant outgroups in the Netherlands. The dataset is collected from two online news website, "nu.nl" and "geenstijl.nl" for a period of nine months. 
 
 ## Relevant links
-**********************************************************
+
 - [Dataset](https://Newsdataset.csv)
 - [Scraping project](https://github.com/UtrechtUniversity/news-scraping)
 - [NU](https://www.nu.nl/)
@@ -15,7 +14,7 @@ versus conspiracy/fake and political orientation for online news articles. In th
 
 
 ## Dataset schema
-****************************************
+
 
 Keys description in the dataset:
 
@@ -47,19 +46,19 @@ In this project we only make use of "text" field in the dataset.
 
 
 ## Usage
-****************************************************************
+
 
 Outgroup's salience is calculated using:
 
     Salience outgroups = (N articles on [outgroup] / N articles full)*100
     
-![alt text](outtable1.JPG "Salience")
+![alt text](image/outtable1.JPG "Salience")
 
-![alt text](outtable2.JPG "Salience")
+![alt text](image/outtable2.JPG "Salience")
 
 
 ## Installation
-****************************************************
+
 This project requires:
   - Python 3.7 or higher
   -  Install the dependencies with the code below
@@ -68,7 +67,7 @@ This project requires:
   ```
 
 ## License and citation
-****************************************************
+
 
 The sentinews project is licensed under the terms of the [MIT License](/LICENSE.md). When using sentinews for academic work, please cite:
 -	Tubergen, F., Nadi, S., Bagheri, A. (2021).
@@ -77,7 +76,7 @@ sentinews - version 0.1.0. url: github.com/ShNadi/sentinews
 
 
 ## Conribution
-**************************************
+
 
 To contribute code to sentinews, please follow these steps:
 
@@ -87,5 +86,5 @@ To contribute code to sentinews, please follow these steps:
 - Read more about pull requests using [GitHub's official documentation](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
 
 ## Contact
-*****************************************
+
 Do you have any questions, suggestions, or remarks? Feel free to contact "s.nadi@uu.nl"
