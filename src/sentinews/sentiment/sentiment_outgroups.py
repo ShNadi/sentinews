@@ -48,7 +48,7 @@ def document_score(df):
             doc_score += sentence_score(s, model, neg_vec)          # Calculate sentence's score & add it to the
         df.loc[i, 'negativity_score'] = doc_score/len(sentence)    # write the document's score in a new
 
-    # Normalizing negativity scores between 0 and 1
+    # Normalizing negativity scores between 0 and 1- using min/max normalization
     max_value = df['negativity_score'].max()
     min_value = df['negativity_score'].min()
     df['normalized_score'] = (df['negativity_score'] - min_value) / (max_value - min_value)
@@ -56,9 +56,10 @@ def document_score(df):
         lambda x: 1 if 0 <= x < 0.20 else 2 if 0.20 <= x < 0.40 else 3 if 0.40 <= x < 0.60 else 4 if 0.60 <= x < 0.80
         else 5)
 
-    df.to_csv('../../../data/processed/outgroups_negativity_sentiment.csv', index=False)
+    df.to_csv('../../../data/processed/outNL_negativity_sentiment.csv', index=False)
     # df.to_excel('../../../data/processed/outgroups_negativity_sentiment.xlsx', index=False)
     # df.to_csv('../../../data/processed/sample_ds_negativity_sentiment.csv', index=False)
+    # df.to_csv('../../../data/processed/filtered_outgroups_negativity_sentiment.csv', index=False)
     # df.to_excel('../../../data/processed/sample_ds_negativity_sentiment.xlsx', index=False)
     print(df)
 
@@ -75,7 +76,8 @@ def document_score(df):
 
 if __name__ == '__main__':
     start = time.time()
-    df = pd.read_csv('../../../data/processed/filtered_dataset.csv')
+    df = pd.read_csv('../../../data/processed/filtered_news.csv')
+    # df = pd.read_csv('../../../data/processed/filtered_outgroups.csv')
     # df = pd.read_csv('../../../data/processed/random_sample_ds.csv')
     stop_words = stopwords.words('Dutch')
 
