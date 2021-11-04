@@ -2,7 +2,6 @@ from gensim.models import Word2Vec
 import pandas as pd
 from pathlib import Path
 import dill
-from gensim.models import KeyedVectors
 
 
 def train_word2vec_model(df):
@@ -61,7 +60,7 @@ def check_similarities(word1, word2):
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
+    df = pd.read_csv('../../../data/processed/news-dataset--2021-08-11.csv')
     df.dropna(subset=['clean_text'], inplace=True)
     train_word2vec_model(df)
     # model = Word2Vec.load("../../../results/models/word2vec.model")
