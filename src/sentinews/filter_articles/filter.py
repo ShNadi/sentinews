@@ -67,7 +67,7 @@ def filter_location(df):
 
 
 if __name__ == '__main__':
-    df_news = pd.read_csv('../../../data/processed/news-dataset--2021-05-11.csv')
+    df_news = pd.read_csv('../../../data/processed/news-dataset--2021-08-11.csv')
     df_news['text'] = df_news['text'].str.lower()
     print("Size of original dataset:", df_news.shape)
 
